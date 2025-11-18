@@ -55,31 +55,10 @@
                 })
               ];
 
-              environment.systemPackages =
-                let
-                  stablePkgs = with pkgs; [
-                    curl
-                    git
-                    vim
-                    wget
-                  ];
-                  unstablePkgs = with pkgs.unstable; [
-                    bat
-                    fastfetch
-                    fd
-                    fzf
-                    lazygit
-                    neovim
-                    nil
-                    nixfmt-rfc-style
-                    zellij
-                  ];
-                in
-                stablePkgs ++ unstablePkgs;
-
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
+                backupFileExtension = "hmbackup";
                 users.steven = ./home.nix;
               };
             }
