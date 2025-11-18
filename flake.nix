@@ -38,10 +38,16 @@
                 "flakes"
               ];
 
-              programs.nix-ld.enable = true;
-              programs.fish = {
-                enable = true;
-                useBabelfish = true;
+              programs = {
+                nix-ld.enable = true;
+                fish = {
+                  enable = true;
+                  useBabelfish = true;
+                };
+
+                ssh = {
+                  startAgent = true;
+                };
               };
 
               users.users.steven.shell = pkgs.fish;
