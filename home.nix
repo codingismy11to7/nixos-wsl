@@ -18,13 +18,21 @@
         ];
         unstablePkgs = with pkgs.unstable; [
           bat
+          broot
+          btop
+          chafa
+          eza
           fastfetch
           fd
           fzf
+          hexyl
           lazygit
           neovim
           nil
           nixfmt-rfc-style
+          procs
+          ripgrep
+          tree
           zellij
         ];
       in
@@ -45,6 +53,17 @@
         lg = "lazygit";
         vim = "nvim";
       };
+
+      plugins = with pkgs.fishPlugins; [
+        {
+          inherit (bass) src;
+          name = "bass";
+        }
+        {
+          inherit (tide) src;
+          name = "tide";
+        }
+      ];
     };
   };
 }
