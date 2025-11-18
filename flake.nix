@@ -3,6 +3,11 @@
     stable.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
+
+    home-manager = {
+      url = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs =
@@ -10,6 +15,7 @@
       stable,
       nixpkgs-unstable,
       nixos-wsl,
+      home-manager,
       ...
     }:
     {
@@ -17,6 +23,7 @@
         system = "aarch64-linux";
         modules = [
           nixos-wsl.nixosModules.default
+          home-manager.nixosModules.home-manager
           (
             { pkgs, ... }:
             {
@@ -69,6 +76,12 @@
                   ];
                 in
                 stablePkgs ++ unstablePkgs;
+
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.steven = ./home.nix;
+              };
             }
           )
         ];
