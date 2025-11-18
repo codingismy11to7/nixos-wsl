@@ -32,6 +32,12 @@
               ];
 
               programs.nix-ld.enable = true;
+              programs.fish = {
+                enable = true;
+                useBabelfish = true;
+              };
+
+              users.users.steven.shell = pkgs.fish;
 
               nixpkgs.overlays = [
                 (_final: prev: {
@@ -46,12 +52,15 @@
                 let
                   stablePkgs = with pkgs; [
                     curl
-                    fish
                     git
                     vim
                     wget
                   ];
                   unstablePkgs = with pkgs.unstable; [
+                    bat
+                    fastfetch
+                    fd
+                    fzf
                     lazygit
                     neovim
                     nil
