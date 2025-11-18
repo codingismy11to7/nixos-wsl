@@ -19,12 +19,15 @@
             system.stateVersion = "25.05";
             wsl.enable = true;
 
+            wsl.defaultUser = "steven";
             time.timeZone = "America/New_York";
 
             nix.settings.experimental-features = [
               "nix-command"
               "flakes"
             ];
+
+            programs.nix-ld.enable = true;
           }
         ];
       };
