@@ -11,6 +11,7 @@
           curl
           file
           git
+          killall
           unzip
           vim
           wget
@@ -21,6 +22,7 @@
           broot
           btop
           chafa
+          dust
           eza
           fastfetch
           fd
@@ -46,10 +48,21 @@
       interactiveShellInit = ''
         set fish_greeting
 
+        fzf_configure_bindings --git_status= --git_log=
+
+        bind ctrl-alt-l _lazygit_log
+        bind ctrl-alt-s _lazygit_status
+
         fastfetch
       '';
 
+      functions = {
+        _lazygit_status = builtins.readFile ./fishFuncs/_lazygit_status.fish;
+        _lazygit_log = builtins.readFile ./fishFuncs/_lazygit_log.fish;
+      };
+
       shellAliases = {
+        du = "dust";
         lg = "lazygit";
         ls = "eza";
         vim = "nvim";
@@ -63,6 +76,10 @@
         {
           inherit (bass) src;
           name = "bass";
+        }
+        {
+          inherit (fzf-fish) src;
+          name = "fzf.fish";
         }
         {
           inherit (tide) src;
