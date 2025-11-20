@@ -22,13 +22,13 @@
           broot
           btop
           chafa
+          delta
           dust
           eza
           fastfetch
           fd
           fzf
           hexyl
-          lazygit
           neovim
           nil
           nixfmt-rfc-style
@@ -86,6 +86,49 @@
           name = "tide";
         }
       ];
+    };
+
+    lazygit = {
+      enable = true;
+      package = pkgs.unstable.lazygit;
+      settings = {
+        gui = {
+          nerdFontsVersion = "3";
+          spinner = {
+            rate = 500;
+            frames = [
+              "🕛 "
+              "🕐 "
+              "🕑 "
+              "🕒 "
+              "🕓 "
+              "🕔 "
+              "🕕 "
+              "🕖 "
+              "🕗 "
+              "🕘 "
+              "🕙 "
+              "🕚 "
+            ];
+          };
+        };
+        git = {
+          ignoreWhitespaceInDiffView = true;
+          log = {
+            showGraph = "when-maximised";
+
+            # i have had this as true for a long time,
+            # but i'm thinking it's not great. let's try this
+            showWholeGraph = false;
+          };
+          pagers = [
+            {
+              colorArg = "always";
+              pager = "delta --dark --paging=never";
+            }
+          ];
+        };
+      };
     };
   };
 
