@@ -1,17 +1,42 @@
-{ lib, pkgs, ... }:
 {
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  ageKeyFile = "${config.home.homeDirectory}/dotfiles/secrets/keys.txt";
+in
+{
+  imports = [ inputs.sops-nix.homeManagerModules.sops ];
+
+  sops = {
+    age.keyFile = ageKeyFile;
+    defaultSopsFile = ./secrets/secrets.json;
+    defaultSopsFormat = "json";
+
+    secrets.sshPrivKey = {
+      path = "${config.home.homeDirectory}/.ssh/id_rsa";
+      mode = "0600";
+    };
+  };
+
   home = {
     stateVersion = "25.05";
 
     sessionVariables.EDITOR = "nvim";
+    sessionVariables.SOPS_AGE_KEY_FILE = ageKeyFile;
 
     packages =
       let
         stablePkgs = with pkgs; [
+          age
           curl
           file
           git
           killall
+          sops
           unzip
           vim
           wget

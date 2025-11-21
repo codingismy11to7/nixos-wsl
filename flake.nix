@@ -8,6 +8,11 @@
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "stable";
+    };
   };
 
   outputs =
@@ -17,7 +22,7 @@
       nixos-wsl,
       home-manager,
       ...
-    }:
+    }@inputs:
     {
       nixosConfigurations.nixos = stable.lib.nixosSystem {
         system = "aarch64-linux";
@@ -66,6 +71,7 @@
                 useUserPackages = true;
                 backupFileExtension = "hmbackup";
                 users.steven = ./home.nix;
+                extraSpecialArgs = { inherit inputs; };
               };
             }
           )
