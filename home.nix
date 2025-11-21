@@ -32,10 +32,13 @@ in
       let
         stablePkgs = with pkgs; [
           age
+          cargo
           curl
           file
+          gcc
           git
           killall
+          nodejs
           sops
           unzip
           vim
@@ -59,12 +62,17 @@ in
           nixfmt-rfc-style
           procs
           ripgrep
+          statix
           tree
+          tree-sitter
           zellij
         ];
       in
       stablePkgs ++ unstablePkgs;
   };
+
+  xdg.configFile."nvim".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/nvim";
 
   programs = {
     fish = {
