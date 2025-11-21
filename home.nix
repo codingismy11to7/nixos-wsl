@@ -25,8 +25,11 @@ in
   home = {
     stateVersion = "25.05";
 
-    sessionVariables.EDITOR = "nvim";
-    sessionVariables.SOPS_AGE_KEY_FILE = ageKeyFile;
+    sessionVariables = {
+      DOCKER_HOST = "unix://$\{XDG_RUNTIME_DIR}podman/podman.sock";
+      EDITOR = "nvim";
+      SOPS_AGE_KEY_FILE = ageKeyFile;
+    };
 
     packages =
       let
@@ -51,15 +54,19 @@ in
           btop
           chafa
           delta
+          distrobox
+          distrobox-tui
           dust
           eza
           fastfetch
           fd
           fzf
           hexyl
+          lazydocker
           neovim
           nil
           nixfmt-rfc-style
+          podman-compose
           procs
           ripgrep
           statix
