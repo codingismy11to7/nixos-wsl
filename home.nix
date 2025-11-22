@@ -22,6 +22,11 @@ in
       path = "${config.home.homeDirectory}/.ssh/id_rsa";
       mode = "0600";
     };
+
+    secrets.githubNixToken = { };
+    templates."nix.conf".content = ''
+      access-tokens = github.com=${config.sops.placeholder.githubNixToken}
+    '';
   };
 
   home = {
@@ -82,6 +87,10 @@ in
 
   xdg.configFile."nvim".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/home/nvim";
+
+  xdg.configFile."nix/nix.conf".source =
+    config.lib.file.mkOutOfStoreSymlink
+      config.sops.templates."nix.conf".path;
 
   programs = {
     lazygit = {
