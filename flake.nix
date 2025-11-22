@@ -31,17 +31,24 @@
           home-manager.nixosModules.home-manager
           (
             { pkgs, ... }:
+            let
+              username = "steven";
+            in
             {
               system.stateVersion = "25.05";
               wsl.enable = true;
 
-              wsl.defaultUser = "steven";
+              wsl.defaultUser = username;
               time.timeZone = "America/New_York";
 
-              nix.settings.experimental-features = [
-                "nix-command"
-                "flakes"
-              ];
+              nix.settings = {
+                auto-optimise-store = true;
+                experimental-features = [
+                  "nix-command"
+                  "flakes"
+                ];
+                trusted-users = [ username ];
+              };
 
               programs = {
                 nix-ld.enable = true;
@@ -63,7 +70,7 @@
                 package = pkgs.unstable.podman;
               };
 
-              users.users.steven.shell = pkgs.fish;
+              users.users.${username}.shell = pkgs.fish;
 
               nixpkgs.overlays = [
                 (_final: prev: {
@@ -78,7 +85,7 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "hmbackup";
-                users.steven = ./home.nix;
+                users.${username} = ./home.nix;
                 extraSpecialArgs = { inherit inputs; };
               };
             }
