@@ -1,45 +1,83 @@
 {
+  nixConfig = {
+    extra-substituters = [
+      "https://nixos-raspberrypi.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+    ];
+  };
+
   inputs = {
-    stable.url = "github:NixOS/nixpkgs/nixos-25.05";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-wsl.url = "github:nix-community/NixOS-WSL";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    # develop is currently the default branch and is 23
+    # commits ahead of main; main is the stable branch.
+    # assuming since this device is brand new that i should
+    # stay bleeding edge
+    nixos-rpi.url = "github:nvmd/nixos-raspberrypi";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixos-rpi/nixpkgs";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "stable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
   outputs =
     {
-      stable,
-      nixpkgs-unstable,
-      nixos-wsl,
+      nixpkgs,
+      nixos-rpi,
+      disko,
       home-manager,
       ...
     }@inputs:
+    let
+      hostname = "nixos";
+      username = "steven";
+
+      nixpkgs-unstable = nixpkgs;
+    in
     {
-      nixosConfigurations.nixos = stable.lib.nixosSystem {
-        system = "aarch64-linux";
+      nixosConfigurations.${hostname} = nixos-rpi.lib.nixosSystemFull {
+        specialArgs = {
+          nixos-raspberrypi = nixos-rpi;
+        };
+        #system = "aarch64-linux";
         modules = [
-          nixos-wsl.nixosModules.default
           home-manager.nixosModules.home-manager
+          {
+            imports = with nixos-rpi.nixosModules; [
+              raspberry-pi-5.base
+              raspberry-pi-5.page-size-16k
+              raspberry-pi-5.display-vc4
+              raspberry-pi-5.bluetooth
+            ];
+          }
+          disko.nixosModules.disko
+          ./disko-nvme-btrfs.nix
           (
             { pkgs, ... }:
-            let
-              username = "steven";
-            in
             {
               system.stateVersion = "25.05";
-              wsl.enable = true;
-
-              wsl.defaultUser = username;
+              networking.hostName = hostname;
               time.timeZone = "America/New_York";
+
+              boot = {
+                loader.raspberryPi.bootloader = "kernel";
+
+                tmp.useTmpfs = true;
+              };
+
+              #wsl.defaultUser = username;
 
               nix = {
                 registry = {
