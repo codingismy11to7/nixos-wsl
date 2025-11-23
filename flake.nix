@@ -41,13 +41,19 @@
               wsl.defaultUser = username;
               time.timeZone = "America/New_York";
 
-              nix.settings = {
-                auto-optimise-store = true;
-                experimental-features = [
-                  "nix-command"
-                  "flakes"
-                ];
-                trusted-users = [ username ];
+              nix = {
+                registry = {
+                  unstable.flake = nixpkgs-unstable;
+                };
+
+                settings = {
+                  auto-optimise-store = true;
+                  experimental-features = [
+                    "nix-command"
+                    "flakes"
+                  ];
+                  trusted-users = [ username ];
+                };
               };
 
               programs = {
