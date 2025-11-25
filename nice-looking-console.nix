@@ -13,7 +13,7 @@
     # ter-u22n is probably too big
     font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u16n.psf.gz";
 
-    keyMap = "dvorak";
+    keyMap = lib.mkDefault "dvorak";
 
     # Make colored console output more readable
     # for example, `ip addr`s (blues are too dark by default)
