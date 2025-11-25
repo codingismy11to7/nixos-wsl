@@ -51,7 +51,6 @@
         specialArgs = {
           nixos-raspberrypi = nixos-rpi;
         };
-        #system = "aarch64-linux";
         modules = [
           home-manager.nixosModules.home-manager
           {

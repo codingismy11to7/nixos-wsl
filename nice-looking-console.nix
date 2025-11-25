@@ -13,6 +13,8 @@
     # ter-u22n is probably too big
     font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u16n.psf.gz";
 
+    keyMap = "dvorak";
+
     # Make colored console output more readable
     # for example, `ip addr`s (blues are too dark by default)
     # Tango theme: https://yayachiken.net/en/posts/tango-colors-in-terminal/

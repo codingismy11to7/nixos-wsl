@@ -71,6 +71,7 @@ in
           hexyl
           lazydocker
           neovim
+          nh
           nil
           nixfmt-rfc-style
           podman-compose

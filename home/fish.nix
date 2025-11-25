@@ -51,7 +51,7 @@
   };
 
   home.activation = {
-    configureFishTide = lib.hm.dag.entryAfter [ "writeBoundary" ] (
+    configureFishTide = lib.hm.dag.entryAfter [ "linkGeneration" ] (
       let
         tideArgs = [
           "tide configure"
