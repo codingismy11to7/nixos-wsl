@@ -41,6 +41,8 @@
       ...
     }@inputs:
     let
+      isGui = true;
+
       hostname = "nixos";
       username = "steven";
 
@@ -50,6 +52,7 @@
       nixosConfigurations.${hostname} = nixos-rpi.lib.nixosSystem {
         specialArgs = {
           nixos-raspberrypi = nixos-rpi;
+          inherit isGui;
         };
         modules = [
           home-manager.nixosModules.home-manager
@@ -190,7 +193,7 @@
                 users.${username} = ./home.nix;
                 extraSpecialArgs = {
                   inherit inputs;
-                  isGui = true;
+                  inherit isGui;
                 };
               };
             }

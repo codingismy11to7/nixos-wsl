@@ -71,8 +71,7 @@
         ]
         ++ (builtins.map
           (
-            dir:
-            "SUPER, ${builtins.toUpper dir}, Move window focus ${dir}, movefocus, ${builtins.substring 0 1 dir}"
+            dir: "SUPER, ${lib.toUpper dir}, Move window focus ${dir}, movefocus, ${builtins.substring 0 1 dir}"
           )
           [
             "up"
