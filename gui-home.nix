@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   isGui ? false,
@@ -7,30 +6,6 @@
 }:
 {
   config = lib.mkIf isGui {
-    services.displayManager.sddm = {
-      enable = true;
-
-      autoNumlock = true;
-
-      theme = "breeze";
-
-      wayland = {
-        enable = true;
-      };
-    };
-
-    programs = {
-      hyprland = {
-        enable = true;
-
-        withUWSM = true;
-      };
-
-      hyprlock.enable = true;
-    };
-
-    xdg.configFile."uwsm/env".source =
-      "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";
 
     home = {
       packages = with pkgs.unstable; [

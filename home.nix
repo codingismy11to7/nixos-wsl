@@ -10,7 +10,7 @@ in
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
-    ./gui.nix
+    ./gui-home.nix
     ./home/fish.nix
   ];
 

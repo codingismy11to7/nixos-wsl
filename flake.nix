@@ -67,6 +67,7 @@
             { pkgs, ... }:
             {
               imports = [
+                ./gui-system.nix
                 ./nice-looking-console.nix
               ];
 
