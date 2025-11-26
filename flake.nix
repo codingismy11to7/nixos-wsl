@@ -130,6 +130,8 @@
                 ssh = {
                   startAgent = true;
                 };
+
+                command-not-found.enable = false;
               };
 
               services.openssh = {
