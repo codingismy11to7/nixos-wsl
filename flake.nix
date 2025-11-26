@@ -66,7 +66,10 @@
           (
             { pkgs, ... }:
             {
-              imports = [ ./nice-looking-console.nix ];
+              imports = [
+                ./gui.nix
+                ./nice-looking-console.nix
+              ];
 
               system.stateVersion = "25.05";
               networking = {
