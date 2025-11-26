@@ -67,7 +67,6 @@
             { pkgs, ... }:
             {
               imports = [
-                ./gui.nix
                 ./nice-looking-console.nix
               ];
 
@@ -188,7 +187,10 @@
                 useUserPackages = true;
                 backupFileExtension = "hmbackup";
                 users.${username} = ./home.nix;
-                extraSpecialArgs = { inherit inputs; };
+                extraSpecialArgs = {
+                  inherit inputs;
+                  isGui = true;
+                };
               };
             }
           )

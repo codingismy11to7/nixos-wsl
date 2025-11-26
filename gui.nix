@@ -1,42 +1,52 @@
-{ config, pkgs, ... }:
 {
-  services.displayManager.sddm = {
-    enable = true;
-
-    autoNumlock = true;
-
-    theme = "breeze";
-
-    wayland = {
-      enable = true;
-    };
-  };
-
-  programs = {
-    hyprland = {
+  config,
+  pkgs,
+  lib,
+  isGui ? false,
+  ...
+}:
+{
+  config = lib.mkIf isGui {
+    services.displayManager.sddm = {
       enable = true;
 
-      withUWSM = true;
+      autoNumlock = true;
+
+      theme = "breeze";
+
+      wayland = {
+        enable = true;
+      };
     };
 
-    hyprlock.enable = true;
-  };
+    programs = {
+      hyprland = {
+        enable = true;
 
-  xdg.configFile."uwsm/env".source =
-    "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";
+        withUWSM = true;
+      };
 
-  home = {
-    packages = with pkgs.unstable; [
-      ghostty
-      nautilus
-    ];
+      hyprlock.enable = true;
+    };
 
-    pointerCursor = {
-      gtk.enable = true;
-      # no idea what these are, just pulling from hyprland wiki atm
-      package = pkgs.unstable.bibata-cursors;
-      name = "Bibata-Modern-Classic";
-      size = 16;
+    xdg.configFile."uwsm/env".source =
+      "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";
+
+    home = {
+      packages = with pkgs.unstable; [
+        ghostty
+        mpv
+        nautilus
+      ];
+
+      pointerCursor = {
+        gtk.enable = true;
+        # no idea what these are, just pulling from hyprland wiki atm
+        package = pkgs.unstable.bibata-cursors;
+        name = "Bibata-Modern-Classic";
+        size = 16;
+      };
+
     };
 
     gtk = {
@@ -62,7 +72,8 @@
         size = 11;
       };
 
-      colorScheme = "dark";
+      # not gonna bump HM to unstable right now, and this is a new option
+      # colorScheme = "dark";
     };
 
     wayland.windowManager.hyprland = {
@@ -73,45 +84,45 @@
       portalPackage = null;
 
       systemd.enableXdgAutostart = true;
-    };
-  };
 
-  wayland.windowManager.hyprland.settings = {
-    monitor = ",preferred,auto,auto";
-    "$terminal" = "uwsm-app -- ghostty";
-    "$fileManager" = "uwsm-app -- nautilus --new-window";
+      settings = {
+        monitor = ",preferred,auto,auto";
+        "$terminal" = "uwsm-app -- ghostty";
+        "$fileManager" = "uwsm-app -- nautilus --new-window";
 
-    bindd = [
-      "SUPER, RETURN, Terminal, exec, ghostty"
-      "SUPER, W, Close window, killactive"
-    ]
-    ++ (builtins.map
-      (
-        dir:
-        "SUPER, ${builtins.toUpper dir}, Move window focus ${dir}, movefocus, ${builtins.substring 0 1 dir}"
-      )
-      [
-        "up"
-        "down"
-        "left"
-        "right"
-      ]
-    )
-    ++ (
-      # workspaces
-      # binds SUPER + [shift +] {1..9} to [move to] workspace {1..9}
-      builtins.concatLists (
-        builtins.genList (
-          i:
-          let
-            ws = i + 1;
-          in
+        bindd = [
+          "SUPER, RETURN, Terminal, exec, ghostty"
+          "SUPER, W, Close window, killactive"
+        ]
+        ++ (builtins.map
+          (
+            dir:
+            "SUPER, ${builtins.toUpper dir}, Move window focus ${dir}, movefocus, ${builtins.substring 0 1 dir}"
+          )
           [
-            "SUPER, code:1${toString i}, Switch to workspace ${toString ws}, workspace, ${toString ws}"
-            "SUPER SHIFT, code:1${toString i}, Move window to workspace ${toString ws}, movetoworkspace, ${toString ws}"
+            "up"
+            "down"
+            "left"
+            "right"
           ]
-        ) 9
-      )
-    );
+        )
+        ++ (
+          # workspaces
+          # binds SUPER + [shift +] {1..9} to [move to] workspace {1..9}
+          builtins.concatLists (
+            builtins.genList (
+              i:
+              let
+                ws = i + 1;
+              in
+              [
+                "SUPER, code:1${toString i}, Switch to workspace ${toString ws}, workspace, ${toString ws}"
+                "SUPER SHIFT, code:1${toString i}, Move window to workspace ${toString ws}, movetoworkspace, ${toString ws}"
+              ]
+            ) 9
+          )
+        );
+      };
+    };
   };
 }
