@@ -102,17 +102,6 @@
                 tmp.useTmpfs = true;
               };
 
-              environment.sessionVariables = {
-                # so i couldn't get ghostty to launch without an open gl error.
-                # eglgears_wayland was fine, alacritty and kitty were both fine
-                # (no idea if they use ogl). anyway gemini seems to think or
-                # hallucinate that it's because the pi only has opengl es and
-                # that's not good enough so we need to translate to vulkan.
-                # it did launch with this flag, so i mean...i guess i'll set
-                # it system-wide?
-                MESA_LOADER_DRIVER_OVERRIDE = "zink";
-              };
-
               systemd.services = {
                 # Do not take down the network for too long when upgrading,
                 # This also prevents failures of services that are restarted instead of stopped.
