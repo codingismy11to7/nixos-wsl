@@ -5,15 +5,21 @@
 }:
 {
   config = lib.mkIf isGui {
-    services.displayManager.sddm = {
-      enable = true;
-
-      autoNumlock = true;
-
-      theme = "breeze";
-
-      wayland = {
+    services = {
+      displayManager.sddm = {
         enable = true;
+
+        autoNumlock = true;
+
+        theme = "breeze";
+
+        wayland = {
+          enable = true;
+        };
+      };
+      xserver.xkb = {
+        layout = "us";
+        variant = "dvorak";
       };
     };
 

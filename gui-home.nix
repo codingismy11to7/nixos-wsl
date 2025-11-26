@@ -66,6 +66,15 @@
         "$terminal" = "uwsm-app -- kitty";
         "$fileManager" = "uwsm-app -- nautilus --new-window";
 
+        input = {
+          kb_layout = "us";
+          kb_variant = "dvorak";
+          kb_options = "compose:ralt";
+          repeat_rate = 40;
+          repeat_delay = 600;
+          numlock_by_default = true;
+        };
+
         bindd = [
           "SUPER, RETURN, Terminal, exec, $terminal"
           "SUPER, W, Close window, killactive"
