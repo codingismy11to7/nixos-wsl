@@ -9,7 +9,7 @@
 
     home = {
       packages = with pkgs.unstable; [
-        ghostty
+        kitty
         mpv
         nautilus
       ];
@@ -62,11 +62,12 @@
 
       settings = {
         monitor = ",preferred,auto,auto";
-        "$terminal" = "uwsm-app -- ghostty";
+        # having issues with ghostty, kitty seems like a decent replacement
+        "$terminal" = "uwsm-app -- kitty";
         "$fileManager" = "uwsm-app -- nautilus --new-window";
 
         bindd = [
-          "SUPER, RETURN, Terminal, exec, ghostty"
+          "SUPER, RETURN, Terminal, exec, $terminal"
           "SUPER, W, Close window, killactive"
         ]
         ++ (builtins.map
