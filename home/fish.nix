@@ -24,6 +24,7 @@
     };
 
     shellAliases = {
+      cat = "bat";
       du = "dust";
       lg = "lazygit";
       ls = "eza";
