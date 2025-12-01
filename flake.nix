@@ -68,6 +68,15 @@
                 };
               };
 
+              services.openssh = {
+                enable = true;
+
+                settings = {
+                  PermitRootLogin = "no";
+                  PasswordAuthentication = false;
+                };
+              };
+
               virtualisation.podman = {
                 enable = true;
                 dockerCompat = true;
