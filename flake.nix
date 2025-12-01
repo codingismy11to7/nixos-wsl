@@ -85,7 +85,14 @@
               time.timeZone = "America/New_York";
 
               services = {
-                openssh.enable = true;
+                openssh = {
+                  enable = true;
+
+                  settings = {
+                    PermitRootLogin = "no";
+                    PasswordAuthentication = false;
+                  };
+                };
 
                 udev.extraRules = ''
                   # Ignore partitions with "Required Partition" GPT partition attribute
@@ -138,15 +145,6 @@
                 };
 
                 command-not-found.enable = false;
-              };
-
-              services.openssh = {
-                enable = true;
-
-                settings = {
-                  PermitRootLogin = "no";
-                  PasswordAuthentication = false;
-                };
               };
 
               virtualisation.podman = {
