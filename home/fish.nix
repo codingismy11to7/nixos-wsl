@@ -26,6 +26,7 @@
     };
 
     shellAliases = {
+      cat = "bat";
       du = "dust";
       lg = "lazygit";
       ls = "eza";
@@ -33,7 +34,7 @@
     };
 
     shellAbbrs = {
-      reb = "sudo nixos-rebuild switch --flake";
+      reb = "nh os switch";
     };
 
     plugins = with pkgs.fishPlugins; [
