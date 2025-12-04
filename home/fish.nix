@@ -19,8 +19,10 @@
     '';
 
     functions = {
+      _in_zellij = builtins.readFile ./fishFuncs/_in_zellij.fish;
       _lazygit_status = builtins.readFile ./fishFuncs/_lazygit_status.fish;
       _lazygit_log = builtins.readFile ./fishFuncs/_lazygit_log.fish;
+      _run_cmd_in_zellij_popup = builtins.readFile ./fishFuncs/_run_cmd_in_zellij_popup.fish;
     };
 
     shellAliases = {
