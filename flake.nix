@@ -24,7 +24,7 @@
       ...
     }@inputs:
     {
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.nixowsl = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
         modules = [
           nixos-wsl.nixosModules.default
@@ -36,9 +36,12 @@
             in
             {
               system.stateVersion = "25.05";
-              wsl.enable = true;
-
-              wsl.defaultUser = username;
+              wsl = {
+                enable = true;
+                useWindowsDriver = true;
+                defaultUser = username;
+              };
+              networking.hostName = "nixowsl";
               time.timeZone = "America/New_York";
 
               nix = {
