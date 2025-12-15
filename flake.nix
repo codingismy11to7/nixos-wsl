@@ -26,21 +26,18 @@
     {
       nixosConfigurations.nixowsl = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
+        specialArgs = {
+          inherit inputs;
+          username = "steven";
+        };
         modules = [
           nixos-wsl.nixosModules.default
           home-manager.nixosModules.home-manager
+          ./modules/core/wsl.nix
           (
-            { pkgs, ... }:
-            let
-              username = "steven";
-            in
+            { pkgs, username, ... }:
             {
               system.stateVersion = "25.05";
-              wsl = {
-                enable = true;
-                useWindowsDriver = true;
-                defaultUser = username;
-              };
               networking.hostName = "nixowsl";
               time.timeZone = "America/New_York";
 
@@ -98,7 +95,7 @@
               nixpkgs.overlays = [
                 (_final: prev: {
                   unstable = import nixpkgs-unstable {
-                    inherit (prev) system;
+                    system = prev.stdenv.hostPlatform.system;
                     config.allowUnfree = true;
                   };
                 })
@@ -107,7 +104,7 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                backupFileExtension = "hmbackup";
+                backupFileExtension = "hm-backup";
                 users.${username} = ./home.nix;
                 extraSpecialArgs = { inherit inputs; };
               };
