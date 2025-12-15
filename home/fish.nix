@@ -3,6 +3,9 @@
   pkgs,
   ...
 }:
+let
+  join = lib.concatStringsSep " ";
+in
 {
   programs.fish = {
     enable = true;
@@ -31,6 +34,8 @@
       lg = "lazygit";
       ls = "eza";
       vim = "nvim";
+
+      gembot = "npx -y @google/gemini-cli@latest";
     };
 
     shellAbbrs = {
@@ -39,16 +44,16 @@
 
     plugins = with pkgs.fishPlugins; [
       {
-        inherit (bass) src;
         name = "bass";
+        src = bass.src;
       }
       {
-        inherit (fzf-fish) src;
         name = "fzf.fish";
+        src = fzf-fish.src;
       }
       {
-        inherit (tide) src;
         name = "tide";
+        src = tide.src;
       }
     ];
   };
@@ -77,7 +82,8 @@
       ''
         verboseEcho "Configuring Tide for Fish shell..."
 
-        run ${pkgs.fish}/bin/fish -c "${lib.concatStringsSep " " tideArgs}"
+        fish_function_path=${pkgs.fishPlugins.tide}/share/fish/vendor_functions.d/ \
+          ${pkgs.fish}/bin/fish --interactive --command "${join tideArgs}"
       ''
     );
   };
